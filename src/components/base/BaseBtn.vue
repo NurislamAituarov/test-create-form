@@ -19,6 +19,7 @@ export default {
   border-radius: 10px;
   font-size: 16px;
   line-height: 20px;
+  font-weight: 500;
   color: var(--primary_color);
   cursor: pointer;
   border: 1px solid transparent;

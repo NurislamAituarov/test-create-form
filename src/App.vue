@@ -1,10 +1,5 @@
 <template>
   <div id="app">
-    <!-- <nav>
-      <router-link to="/">forms</router-link> |
-      <router-link to="/create-form">create form</router-link>
-    </nav> -->
-
     <div class="wrapper">
       <LeftSideBare />
       <router-view />
@@ -25,7 +20,7 @@ export default {
 @import url(./assets/styles/main.css);
 .wrapper {
   max-width: 1440px;
-  min-height: 100vh;
+  height: 100vh;
 
   margin: 0 auto;
   display: flex;

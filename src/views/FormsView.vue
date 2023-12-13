@@ -2,24 +2,26 @@
   <div class="container-forms">
     <div class="header">
       <h2 class="header__title">Формы</h2>
-      <BaseBtn name="Создать форму" size="lg" type="filled" />
+      <router-link to="/create-form">
+        <BaseBtn name="Создать форму" size="lg" type="filled" />
+      </router-link>
     </div>
 
-    <FormItem />
-    <FormItem />
+    <FormRegistration />
+    <FormRegistration />
   </div>
 </template>
 
 <script>
-import FormItem from '@/components/FormItem.vue';
+import FormRegistration from '@/components/FormRegistration.vue';
 import BaseBtn from '@/components/base/BaseBtn.vue';
 
 export default {
   name: 'FormsView',
-  components: { FormItem, BaseBtn },
+  components: { FormRegistration, BaseBtn },
 };
 </script>
-<style scoped>
+<style>
 .container-forms {
   width: 100%;
   padding: 80px 165px 90px 30px;

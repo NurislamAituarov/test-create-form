@@ -19,7 +19,7 @@
 import BaseBtn from './base/BaseBtn.vue';
 
 export default {
-  name: 'FormItem',
+  name: 'FormRegistration',
   components: { BaseBtn },
 };
 </script>

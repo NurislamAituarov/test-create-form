@@ -1,0 +1,20 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+:root {
+  --primary_color: #3ea748;
+}
+
+body {
+  font-size: 16px;
+  line-height: 20px;
+  font-weight: 400;
+}
+
+button {
+  border: none;
+  outline: none;
+}

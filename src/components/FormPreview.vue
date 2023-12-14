@@ -1,23 +1,26 @@
 <template>
   <div class="form-preview">
-    <form v-if="fields.length" class="form">
+    <form v-if="mainFields.length" class="form" @submit.prevent="onSubmit">
       <h2 class="form__title">Форма регистрации участников</h2>
 
       <div class="form__fields">
-        <div class="form__field" v-for="field of fields" :key="field.id">
+        <div class="form__field" v-for="field of mainFields" :key="field.id">
           <input
             v-if="field.type === 'text' || field.type === 'number'"
             class="form__input"
+            :class="{ form__error: field.required && errorRequired && !field.value }"
             :id="field.id"
             :type="field.type"
             :placeholder="field.name"
+            v-model="field.value"
           />
 
           <BaseSelect
             v-else
-            v-model="field.name"
+            v-model="field.value"
             :placeholder="field.name"
             :options="field.options"
+            :class="{ form__error: field.required && errorRequired && !field.value }"
           />
         </div>
       </div>
@@ -25,7 +28,9 @@
       <BaseCheckbox
         id="policy-condition"
         label="Нажимая кнопку «Отправить», я принимаю условия политики конфиденциальности"
+        v-model="policyCondition"
       />
+
       <BaseBtn name="Отправить" size="lg" type="filled" />
     </form>
   </div>
@@ -39,15 +44,44 @@ import BaseSelect from './base/BaseSelect.vue';
 
 export default {
   name: 'FormPreview',
+  components: { BaseBtn, BaseCheckbox, BaseSelect },
 
   data() {
-    return {};
+    return {
+      mainFields: [],
+      policyCondition: false,
+      errorRequired: false,
+    };
   },
 
   computed: mapState({
     fields: (state) => state.fields,
   }),
-  components: { BaseBtn, BaseCheckbox, BaseSelect },
+
+  watch: {
+    fields(items) {
+      this.mainFields = items.map((item) => {
+        return item;
+      });
+    },
+  },
+
+  methods: {
+    onSubmit() {
+      for (let i = 0; i < this.mainFields.length; i++) {
+        if (!this.mainFields[i].value && this.mainFields[i].required) {
+          this.errorRequired = true;
+          return;
+        }
+      }
+
+      this.mainFields.forEach((field) => {
+        field.value = '';
+      });
+      this.errorRequired = false;
+      alert('Форма регистрации участника успешно отправлено');
+    },
+  },
 };
 </script>
 
@@ -87,6 +121,10 @@ export default {
     padding: 30px;
     border-radius: 10px;
     margin-bottom: 10px;
+  }
+
+  &__error {
+    border: 1px solid red;
   }
 
   button {

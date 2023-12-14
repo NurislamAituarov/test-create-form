@@ -33,7 +33,7 @@
     >
       <li
         v-for="(option, index) in options"
-        :key="option.name || option"
+        :key="option.name || index"
         :ref="setItemRef"
         role="option"
         tabindex="0"

@@ -29,8 +29,10 @@
           @click="
             addField({
               name: '',
+              value: '',
               type: 'text',
               id: new Date().getTime(),
+              required: false,
             })
           "
         >

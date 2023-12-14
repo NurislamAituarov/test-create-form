@@ -7,18 +7,23 @@
       </router-link>
     </div>
 
-    <FormRegistration />
-    <FormRegistration />
+    <FormRegistration v-for="form of forms" :key="form.id" :form="form" />
   </div>
 </template>
 
 <script>
+import { mapState } from 'vuex';
+
 import FormRegistration from '@/components/FormRegistration.vue';
 import BaseBtn from '@/components/base/BaseBtn.vue';
 
 export default {
   name: 'FormsView',
   components: { FormRegistration, BaseBtn },
+
+  computed: {
+    ...mapState(['forms']),
+  },
 };
 </script>
 <style>

@@ -1,44 +1,76 @@
 <template>
   <div class="form-preview">
-    <form v-if="fields.length" class="form">
+    <form v-if="fields.length" class="form" @submit.prevent="onSubmit">
       <h2 class="form__title">Форма регистрации участников</h2>
 
       <div class="form__fields">
-        <input
-          v-for="field of fields"
-          :key="field.id"
-          class="form__input"
-          :id="field.id"
-          :type="field.type"
-          :placeholder="field.name"
-        />
+        <div class="form__field" v-for="field of fields" :key="field.id">
+          <input
+            v-if="field.type === 'text' || field.type === 'number'"
+            class="form__input"
+            :class="{ form__error: field.required && errorRequired && !field.value }"
+            :id="field.id"
+            :type="field.type"
+            :placeholder="field.name"
+            v-model="field.value"
+          />
+
+          <BaseSelect
+            v-else
+            v-model="field.value"
+            :placeholder="field.name"
+            :options="field.options"
+            :class="{ form__error: field.required && errorRequired && !field.value }"
+          />
+        </div>
       </div>
 
       <BaseCheckbox
         id="policy-condition"
         label="Нажимая кнопку «Отправить», я принимаю условия политики конфиденциальности"
+        v-model="policyCondition"
       />
+
       <BaseBtn name="Отправить" size="lg" type="filled" />
     </form>
   </div>
 </template>
 
 <script>
-import { mapState } from 'vuex';
 import BaseBtn from './base/BaseBtn.vue';
 import BaseCheckbox from './base/BaseCheckbox.vue';
+import BaseSelect from './base/BaseSelect.vue';
 
 export default {
   name: 'FormPreview',
-
-  data() {
-    return {};
+  components: { BaseBtn, BaseCheckbox, BaseSelect },
+  props: {
+    fields: { type: Array },
   },
 
-  computed: mapState({
-    fields: (state) => state.fields,
-  }),
-  components: { BaseBtn, BaseCheckbox },
+  data() {
+    return {
+      policyCondition: false,
+      errorRequired: false,
+    };
+  },
+
+  methods: {
+    onSubmit() {
+      for (let i = 0; i < this.fields.length; i++) {
+        if (!this.fields[i].value && this.fields[i].required) {
+          this.errorRequired = true;
+          return;
+        }
+      }
+
+      this.fields.forEach((field) => {
+        field.value = '';
+      });
+      this.errorRequired = false;
+      alert('Форма регистрации участника успешно отправлено');
+    },
+  },
 };
 </script>
 
@@ -78,6 +110,10 @@ export default {
     padding: 30px;
     border-radius: 10px;
     margin-bottom: 10px;
+  }
+
+  &__error {
+    border: 1px solid red;
   }
 
   button {

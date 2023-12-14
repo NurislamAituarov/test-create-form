@@ -13,7 +13,7 @@
 
     <div class="field__info">
       <div class="field__info-left">
-        <span>{{ field.name }}</span>
+        <span v-if="field.name">{{ field.name }}</span>
         <span>Контакт</span>
       </div>
       <p class="field__delete" @click="$emit('remove-field', field.id)">Удалить поле</p>
@@ -27,34 +27,39 @@
       @input="$emit('input', $event.target.value)"
     />
 
-    <div v-if="field.options" class="field__select">
+    <div v-if="field.type === 'select'" class="field__select">
       <input
         v-for="(option, ind) of field.options"
         :key="ind"
         :id="ind"
-        placeholder="option"
+        placeholder="вариант"
         v-model="option.name"
         type="text"
         class="input option"
       />
     </div>
+
     <button
       v-if="field.type === 'select'"
       @click="addOption({ id: field.id, option: { name: '' } })"
       class="btn-add"
     >
-      Add select option
+      Добавить вариант для списка
     </button>
 
-    <div class="field__required">
-      <input :id="`checkbox${field.id}`" type="checkbox" />
-      <label :for="`checkbox${field.id}`">Сделать поле обязательным</label>
-    </div>
+    <BaseCheckbox
+      :id="`checkbox${field.id}`"
+      label="Сделать поле обязательным"
+      class="field__required"
+      type="required"
+      v-model="fieldRequired.required"
+    />
   </div>
 </template>
 
 <script>
 import { mapActions, mapState } from 'vuex';
+import BaseCheckbox from './base/BaseCheckbox.vue';
 
 export default {
   name: 'FieldItem',
@@ -62,7 +67,6 @@ export default {
     field: { type: Object },
     value: [String],
   },
-
   data() {
     return {
       types: [
@@ -81,39 +85,37 @@ export default {
       ],
     };
   },
-
   computed: {
     ...mapState(['fields']),
-  },
 
+    fieldRequired() {
+      return this.fields.find((fieldItem) => fieldItem.id === this.field.id);
+    },
+  },
   mounted() {
     this.types = this.types.map((type) => {
       if (this.field.type === type.name) {
         return { ...type, isActive: true };
       }
-
       return type;
     });
   },
-
   methods: {
     ...mapActions(['changeField', 'addOption']),
-
     selectType(type) {
       this.changeField({
         ...this.field,
         type,
       });
-
       this.types = this.types.map((item) => {
         if (item.name === type) {
           return { ...item, isActive: true };
         }
-
         return { ...item, isActive: false };
       });
     },
   },
+  components: { BaseCheckbox },
 };
 </script>
 
@@ -153,24 +155,16 @@ export default {
     height: 30px;
     padding: 15px 30px;
     margin-bottom: 5px;
+    border-radius: 5px;
+    font-size: 12px;
+    line-height: 16px;
   }
   .field__required {
-    display: flex;
     align-items: center;
-    gap: 16px;
-    input,
-    label {
-      cursor: pointer;
-    }
-
-    label {
-      font-size: 14px;
-      font-weight: 500;
-      line-height: 18px;
-    }
   }
 
   .field__type {
+    margin-bottom: 10px;
     p {
       margin-bottom: 10px;
     }

@@ -29,8 +29,10 @@
           @click="
             addField({
               name: '',
+              value: '',
               type: 'text',
               id: new Date().getTime(),
+              required: false,
             })
           "
         >
@@ -40,7 +42,7 @@
       </div>
     </div>
 
-    <FormPreview />
+    <FormPreview :fields="fields" />
   </div>
 </template>
 
@@ -68,7 +70,7 @@ export default {
   display: flex;
 }
 .form-create {
-  width: 503px;
+  width: 498px;
   overflow-x: auto;
   padding: 80px 30px;
 }

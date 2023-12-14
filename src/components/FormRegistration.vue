@@ -5,22 +5,47 @@
         <p>Форма регистрации участников</p>
         <span>Автор: user 1</span>
       </div>
-      <span>Дата создания: 01.01.23</span>
+      <span>Дата создания: {{ formatDate }}</span>
     </div>
 
     <div class="form-item__control">
-      <BaseBtn name="Редактировать" size="md" type="empty" />
-      <BaseBtn name="Удалить" size="md" type="br-none" />
+      <BaseBtn name="Редактировать" size="md" type="empty" @on-click="onEdit" />
+
+      <BaseBtn name="Удалить" size="md" type="br-none" @on-click="deleteForm(form.id)" />
     </div>
   </div>
 </template>
 
 <script>
+import { mapActions } from 'vuex';
+
 import BaseBtn from './base/BaseBtn.vue';
 
 export default {
   name: 'FormRegistration',
   components: { BaseBtn },
+  props: {
+    form: { type: Object },
+  },
+
+  computed: {
+    formatDate() {
+      const date = this.form.date;
+      const options = { day: '2-digit', month: '2-digit', year: '2-digit' };
+      const formattedDate = date.toLocaleDateString('en-GB', options).replace(/\//g, '.');
+
+      return formattedDate;
+    },
+  },
+
+  methods: {
+    ...mapActions({ deleteForm: 'deleteForm', editForm: 'editForm' }),
+
+    onEdit() {
+      this.$router.push('/create-form');
+      this.editForm(this.form.id);
+    },
+  },
 };
 </script>
 

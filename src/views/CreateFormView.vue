@@ -42,7 +42,7 @@
       </div>
     </div>
 
-    <FormPreview />
+    <FormPreview :fields="fields" />
   </div>
 </template>
 

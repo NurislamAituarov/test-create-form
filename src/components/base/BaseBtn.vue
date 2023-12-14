@@ -1,5 +1,7 @@
 <template>
-  <button class="btn" :class="`btn-${size} ${type}-bg`">{{ name }}</button>
+  <button @click="$emit('on-click')" class="btn" :class="`btn-${size} ${type}-bg`">
+    {{ name }}
+  </button>
 </template>
 
 <script>

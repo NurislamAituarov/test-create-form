@@ -1,10 +1,10 @@
 <template>
   <div class="form-preview">
-    <form v-if="mainFields.length" class="form" @submit.prevent="onSubmit">
+    <form v-if="fields.length" class="form" @submit.prevent="onSubmit">
       <h2 class="form__title">Форма регистрации участников</h2>
 
       <div class="form__fields">
-        <div class="form__field" v-for="field of mainFields" :key="field.id">
+        <div class="form__field" v-for="field of fields" :key="field.id">
           <input
             v-if="field.type === 'text' || field.type === 'number'"
             class="form__input"
@@ -37,7 +37,6 @@
 </template>
 
 <script>
-import { mapState } from 'vuex';
 import BaseBtn from './base/BaseBtn.vue';
 import BaseCheckbox from './base/BaseCheckbox.vue';
 import BaseSelect from './base/BaseSelect.vue';
@@ -45,37 +44,27 @@ import BaseSelect from './base/BaseSelect.vue';
 export default {
   name: 'FormPreview',
   components: { BaseBtn, BaseCheckbox, BaseSelect },
+  props: {
+    fields: { type: Array },
+  },
 
   data() {
     return {
-      mainFields: [],
       policyCondition: false,
       errorRequired: false,
     };
   },
 
-  computed: mapState({
-    fields: (state) => state.fields,
-  }),
-
-  watch: {
-    fields(items) {
-      this.mainFields = items.map((item) => {
-        return item;
-      });
-    },
-  },
-
   methods: {
     onSubmit() {
-      for (let i = 0; i < this.mainFields.length; i++) {
-        if (!this.mainFields[i].value && this.mainFields[i].required) {
+      for (let i = 0; i < this.fields.length; i++) {
+        if (!this.fields[i].value && this.fields[i].required) {
           this.errorRequired = true;
           return;
         }
       }
 
-      this.mainFields.forEach((field) => {
+      this.fields.forEach((field) => {
         field.value = '';
       });
       this.errorRequired = false;

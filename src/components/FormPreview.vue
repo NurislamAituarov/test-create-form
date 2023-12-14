@@ -4,14 +4,22 @@
       <h2 class="form__title">Форма регистрации участников</h2>
 
       <div class="form__fields">
-        <input
-          v-for="field of fields"
-          :key="field.id"
-          class="form__input"
-          :id="field.id"
-          :type="field.type"
-          :placeholder="field.name"
-        />
+        <div class="form__field" v-for="field of fields" :key="field.id">
+          <input
+            v-if="field.type === 'text' || field.type === 'number'"
+            class="form__input"
+            :id="field.id"
+            :type="field.type"
+            :placeholder="field.name"
+          />
+
+          <BaseSelect
+            v-else
+            v-model="field.name"
+            :placeholder="field.name"
+            :options="field.options"
+          />
+        </div>
       </div>
 
       <BaseCheckbox
@@ -27,6 +35,7 @@
 import { mapState } from 'vuex';
 import BaseBtn from './base/BaseBtn.vue';
 import BaseCheckbox from './base/BaseCheckbox.vue';
+import BaseSelect from './base/BaseSelect.vue';
 
 export default {
   name: 'FormPreview',
@@ -38,7 +47,7 @@ export default {
   computed: mapState({
     fields: (state) => state.fields,
   }),
-  components: { BaseBtn, BaseCheckbox },
+  components: { BaseBtn, BaseCheckbox, BaseSelect },
 };
 </script>
 

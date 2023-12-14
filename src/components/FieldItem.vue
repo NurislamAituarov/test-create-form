@@ -32,18 +32,19 @@
         v-for="(option, ind) of field.options"
         :key="ind"
         :id="ind"
-        placeholder="option"
+        placeholder="вариант"
         v-model="option.name"
         type="text"
         class="input option"
       />
     </div>
+
     <button
       v-if="field.type === 'select'"
       @click="addOption({ id: field.id, option: { name: '' } })"
       class="btn-add"
     >
-      Add select option
+      Добавить вариант для списка
     </button>
 
     <div class="field__required">
@@ -153,6 +154,9 @@ export default {
     height: 30px;
     padding: 15px 30px;
     margin-bottom: 5px;
+    border-radius: 5px;
+    font-size: 12px;
+    line-height: 16px;
   }
   .field__required {
     display: flex;
